@@ -1,19 +1,30 @@
-<!DOCTYPE html><html lang="bn">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>⚠️ Scam Awareness Demo</title>
-  <style>
-    body{margin:0;font-family:Arial,sans-serif;background:#0f172a;color:#fff;text-align:center}
-    header{background:linear-gradient(135deg,#dc2626,#991b1b);padding:18px}
-    header h1{margin:0;font-size:26px}
-    .card{background:#020617;margin:18px auto;padding:22px;max-width:420px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
-    .banner{border-radius:14px;overflow:hidden;margin-bottom:14px}
-    .banner img{width:100%;display:block}
-    .fake-offer{background:#16a34a;padding:14px;border-radius:12px;font-size:22px;font-weight:bold;margin-bottom:12px}
-    .field{margin:10px 0;text-align:left}
-    label{font-size:14px;color:#cbd5f5}
-    input{width:100%;padding:12px;border-radius:10px;border:1px solid #334155;background:#020617;color:#fff}
-    button{margin-top:14px;background:#dc2626;border:none;padding:14px 22px;font-size:16px;color:#fff;border-radius:10px;cursor:pointer;width:100%}
-    button:hover{background:#b91c1c}
-    .warning{display:none;background:#7c2d12;border:2px dashed #fb923c;padding:14px;border-radius:12px;margin
+<meta charset="UTF-8">
+<title>Demo</title>
+</head>
+<body style="background:#111;color:white;text-align:center;padding:30px">
+
+<h2>Scam Awareness Demo</h2>
+
+<input id="name" placeholder="নাম লিখুন"><br><br>
+<input id="phone" placeholder="নাম্বার লিখুন"><br><br>
+
+<button onclick="demo()">Verify</button>
+
+<div id="out" style="margin-top:20px;font-size:18px"></div>
+
+<script>
+function demo(){
+  alert("Verify clicked");   // এই alert আসলে JS ঠিক আছে
+  var n = document.getElementById("name").value;
+  var p = document.getElementById("phone").value;
+
+  document.getElementById("out").innerHTML =
+    "📨 Fake Telegram Preview<br><br>Name: "+n+"<br>Phone: "+p;
+}
+</script>
+
+</body>
+</html>
